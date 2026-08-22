@@ -1,0 +1,609 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap"><style>
+:root{
+  --bg:#ffffff; --hero:#f4eee2; --surface:#ffffff; --surface-2:#f6f7f9;
+  --ink:#16191d; --muted:#5b6271; --faint:#98a0ae; --rule:#e6e8ec; --rule-2:#eef0f3;
+  --accent:#0673f9; --accent-strong:#0052cc; --navy:#002452; --on-accent:#ffffff;
+  --green:#0a7d3f; --green-bg:#e6f4ec; --amber:#b7791f; --amber-bg:#fbf1dd; --red:#d22d3a; --red-bg:#fbe6e7;
+  --warm:#fff3d6; --ok:#0a7d3f; --warn:#b7791f; --bad:#d22d3a;
+  --h0:#eaf2fd; --h1:#bfd8fb; --h2:#7fb0f6; --h3:#3e88f2; --h4:#0673f9;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px -12px rgba(16,24,40,.16);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b1020; --hero:#0e1631; --surface:#121a2e; --surface-2:#0f1728;
+  --ink:#e9eef7; --muted:#9aa7bd; --faint:#66748c; --rule:#22304a; --rule-2:#1a2740;
+  --accent:#4d9bff; --accent-strong:#7bb5ff; --navy:#cfe0ff; --on-accent:#04122b;
+  --green:#4ade80; --green-bg:#10251a; --amber:#e6b23e; --amber-bg:#2a2210; --red:#f2685f; --red-bg:#2c1614;
+  --warm:#3a3016; --ok:#4ade80; --warn:#e6b23e; --bad:#f2685f;
+  --h0:#16223c; --h1:#1e3a66; --h2:#2f5fa6; --h3:#3e88f2; --h4:#4d9bff;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -14px rgba(0,0,0,.65);
+}}
+:root[data-theme="dark"]{
+  --bg:#0b1020; --hero:#0e1631; --surface:#121a2e; --surface-2:#0f1728;
+  --ink:#e9eef7; --muted:#9aa7bd; --faint:#66748c; --rule:#22304a; --rule-2:#1a2740;
+  --accent:#4d9bff; --accent-strong:#7bb5ff; --navy:#cfe0ff; --on-accent:#04122b;
+  --green:#4ade80; --green-bg:#10251a; --amber:#e6b23e; --amber-bg:#2a2210; --red:#f2685f; --red-bg:#2c1614;
+  --warm:#3a3016; --ok:#4ade80; --warn:#e6b23e; --bad:#f2685f;
+  --h0:#16223c; --h1:#1e3a66; --h2:#2f5fa6; --h3:#3e88f2; --h4:#4d9bff;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -14px rgba(0,0,0,.65);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Mona Sans","Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+a{color:inherit}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green);display:inline-block}
+
+/* ============ login gate ============ */
+.gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--hero);overflow:auto}
+.gate.hidden{display:none}
+.gate-card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--rule);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.gate-body{padding:30px 30px 26px}
+.gate .logo{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.logomark{width:30px;height:30px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:none}
+.logo b{font-weight:700;font-size:15px}
+.gate h1{font-size:1.7rem;margin:14px 0 7px}
+.gate .sub{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.field label .opt{color:var(--faint);font-weight:400}
+.field input,.field select{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:11px 13px}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.go{width:100%;margin-top:8px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;border:none;background:var(--accent);color:var(--on-accent);border-radius:10px;padding:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .06s}
+.go:hover{background:var(--accent-strong)} .go:active{transform:translateY(1px)}
+.go[disabled]{opacity:.62;cursor:progress}
+.go .arw{transition:transform .15s} .go:hover .arw{transform:translateX(3px)}
+.gate-err{color:var(--bad);font-size:.88rem;margin-top:12px;min-height:1.1em}
+.gate-foot{padding:15px 30px;border-top:1px solid var(--rule);background:var(--surface-2);color:var(--faint);font-size:12px;line-height:1.5}
+.gate-foot b{color:var(--muted);font-weight:700} .gate-foot .sep{margin:0 6px;color:var(--rule)}
+
+/* ============ app ============ */
+.app.hidden{display:none}
+.btn{font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:9px;padding:9px 14px;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s,background .15s,transform .06s}
+.btn:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule));color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.icon{padding:9px 11px} .btn.ghost{background:transparent}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-strong);color:var(--on-accent)}
+
+/* top navbar */
+.nav{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--rule)}
+.nav-in{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 24px;max-width:1180px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.brand .logomark{width:28px;height:28px;font-size:12px}
+.topright{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.idchip{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--rule);border-radius:99px;padding:6px 13px}
+.idchip b{color:var(--ink);font-weight:700} .idchip .sep{color:var(--faint)} .idchip .ip{color:var(--accent);font-weight:600}
+.sync{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.syncdot{width:9px;height:9px;border-radius:50%;background:var(--ok)}
+.sync.saving .syncdot{background:var(--warn);animation:pulse 1s infinite}
+.sync.offline .syncdot{background:var(--bad)}
+@keyframes pulse{50%{opacity:.35}}
+
+/* hero */
+.hero{background:var(--hero);border-bottom:1px solid var(--rule)}
+.hero-in{max-width:1180px;margin:0 auto;padding:44px 24px 48px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2rem,4vw,2.9rem);font-weight:800}
+.hero .lede{max-width:52ch;margin:15px 0 0;color:var(--muted);font-size:1.05rem}
+.herostats{display:flex;gap:22px;margin-top:24px;flex-wrap:wrap}
+.herostats div b{display:block;font-size:1.5rem;font-weight:800;line-height:1} .herostats div span{font-size:12.5px;color:var(--muted)}
+
+/* ticket / progress card */
+.ticket{position:relative;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:26px 28px}
+.ticket .glabel{color:var(--green);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em}
+.bignum{display:flex;align-items:baseline;gap:4px;margin:8px 0 2px}
+.bignum #pct{font-size:3.4rem;font-weight:800;line-height:.9;color:var(--accent)}
+.bignum b{font-size:1.4rem;font-weight:800;color:var(--accent)}
+.linemeter{height:9px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:12px 0}
+.linemeter>i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.perf{position:relative;border-top:2px dashed var(--rule);margin:18px -28px 16px;height:0}
+.perf::before,.perf::after{content:"";position:absolute;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--hero)}
+.perf::before{left:-9px} .perf::after{right:-9px}
+.subline{font-size:13.5px;color:var(--muted)} .subline b{color:var(--ink);font-weight:700}
+
+/* layout */
+.layout{max-width:1180px;margin:0 auto;padding:38px 24px 80px;display:grid;grid-template-columns:296px 1fr;gap:34px;align-items:start}
+.panel{position:sticky;top:76px;display:flex;flex-direction:column;gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:16px;box-shadow:var(--shadow-sm)}
+.pcard{padding:20px 22px}
+.pcard h3{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green);margin-bottom:16px}
+
+.meter+.meter{margin-top:13px}
+.meter .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:13px}
+.meter .nm{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.sq{width:10px;height:10px;border-radius:3px;flex:none}
+.sq.easy{background:var(--green)}.sq.medium{background:var(--amber)}.sq.hard{background:var(--red)}
+.meter .vl{color:var(--muted)}
+.track{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.track>i{display:block;height:100%;width:0;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.track>i.easy{background:var(--green)}.track>i.medium{background:var(--amber)}.track>i.hard{background:var(--red)}
+
+.heatwrap{overflow-x:auto}
+.heatmap{display:flex;flex-wrap:wrap;gap:4px}
+.hcell{width:13px;height:13px;border-radius:3px;background:var(--h0);flex:none}
+.hcell.solved{background:var(--green)} .hcell.doubt{background:var(--amber)}
+.heat-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:12px}
+.heat-legend .hcell{width:11px;height:11px}
+.heat-empty{font-size:12px;color:var(--faint);line-height:1.5;margin-top:9px}
+
+.flabel{font-size:11.5px;font-weight:600;color:var(--muted);margin:15px 0 8px}
+.flabel:first-of-type{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);background:var(--surface);color:var(--muted);border-radius:99px;padding:6px 12px;transition:all .14s}
+.chip:hover{border-color:var(--faint);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chip.d-easy[aria-pressed="true"]{background:var(--green);border-color:var(--green)}
+.chip.d-medium[aria-pressed="true"]{background:var(--amber);border-color:var(--amber)}
+.chip.d-hard[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+.search{width:100%;font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:10px 13px}
+.search::placeholder{color:var(--faint)}
+.search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.togglerow{display:flex;align-items:center;gap:9px;margin-top:15px;font-size:13.5px;color:var(--muted);cursor:pointer;user-select:none}
+.togglerow input{width:0;height:0;position:absolute;opacity:0}
+.sw{width:38px;height:22px;border-radius:99px;background:var(--surface-2);border:1px solid var(--rule);position:relative;flex:none;transition:background .18s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:transform .18s,background .18s}
+.togglerow input:checked+.sw{background:color-mix(in srgb,var(--accent) 30%,var(--surface-2))}
+.togglerow input:checked+.sw::after{transform:translateX(16px);background:var(--accent)}
+.togglerow input:focus-visible+.sw{outline:2px solid var(--accent);outline-offset:2px}
+
+/* stepper roadmap */
+.road-head{margin-bottom:22px}
+.road-head h2{font-size:1.5rem;font-weight:800;margin:7px 0 0}
+.road-head .rh-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.road-head .tools{display:flex;gap:8px}
+.roadmap{position:relative;padding-left:56px}
+.roadmap::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:var(--rule)}
+.station{position:relative;margin-bottom:14px}
+.node{position:absolute;left:-56px;top:16px;width:40px;height:40px;border-radius:50%;background:var(--surface);border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--muted);z-index:1;transition:.25s}
+.station.part .node{border-color:var(--accent);color:var(--accent)}
+.station.done .node{border-color:var(--accent);background:var(--accent);color:#fff;font-size:0}
+.station.done .node::after{content:"\2713";font-size:18px}
+.sthead{width:100%;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:18px;box-shadow:var(--shadow-sm);transition:border-color .15s,box-shadow .15s,transform .06s}
+.sthead:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--rule));box-shadow:var(--shadow)}
+.station.open .sthead{border-bottom-left-radius:0;border-bottom-right-radius:0;box-shadow:none}
+.station.done .sthead{border-color:color-mix(in srgb,var(--green) 40%,var(--rule))}
+.st-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.sttitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap} .sttitle h3{font-size:1.12rem;font-weight:700}
+.stpct{font-size:11.5px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:99px;padding:2px 9px;line-height:1.5}
+.stpct:empty{display:none}
+.station.done .stpct{color:var(--green);background:var(--green-bg)}
+.stdesc{color:var(--muted);font-size:.92rem}
+.stdist{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;display:inline-flex;gap:5px;align-items:center}
+.tag.easy{color:var(--green);background:var(--green-bg)}
+.tag.medium{color:var(--amber);background:var(--amber-bg)}
+.tag.hard{color:var(--red);background:var(--red-bg)}
+.stright{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:9px;min-width:154px}
+.stcount{font-size:12.5px;color:var(--muted);font-weight:600} .stcount b{color:var(--ink)}
+.station.done .stcount{color:var(--green)} .station.done .stcount b{color:var(--green)}
+.stbar{width:154px;height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.stbar>i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.station.done .stbar>i{background:var(--green)}
+.caret{flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--faint);display:flex;align-items:center;justify-content:center;transition:transform .2s,color .15s,background .15s}
+.sthead:hover .caret{color:var(--accent)}
+.station.open .caret{transform:rotate(90deg);color:#fff;background:var(--accent)}
+.stbody{display:none;background:var(--surface);border:1px solid var(--rule);border-top:none;border-radius:0 0 14px 14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.station.open .stbody{display:block}
+.dgroup{border-top:1px solid var(--rule-2)} .dgroup:first-child{border-top:none}
+.dghead{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:11px 19px 6px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.q{display:flex;align-items:center;gap:12px;padding:9px 19px;border-top:1px solid var(--rule-2);transition:background .12s}
+.dghead+.q{border-top:none} .q:hover{background:var(--surface-2)}
+.q.solved .qname{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--green) 55%,transparent)}
+.state{flex:none;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--rule);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--faint);transition:all .14s}
+.state:hover{border-color:var(--accent)}
+.q.solved .state{background:var(--green);border-color:var(--green);color:#fff}
+.q.doubt .state{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.qname{flex:1;min-width:0;font-size:.95rem} .qname a{text-decoration:none;color:inherit} .qname a:hover{color:var(--accent);text-decoration:underline}
+.qmeta{display:flex;align-items:center;gap:8px;flex:none}
+.plat{font-size:10.5px;font-weight:600;color:var(--muted);border:1px solid var(--rule);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.plat.hr{color:var(--green)}.plat.lc{color:var(--amber)}.plat.pg{color:var(--accent)}
+.qlink{flex:none;color:var(--faint);text-decoration:none;font-size:15px;padding:2px 4px;border-radius:6px} .qlink:hover{color:var(--accent)}
+.empty{display:none;text-align:center;color:var(--muted);padding:56px 20px}
+.station.hide,.q.hide{display:none}
+footer{border-top:1px solid var(--rule);padding:24px;background:var(--surface-2)}
+.footwrap{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted)}
+.credit b{color:var(--ink);font-weight:700} .credit .sep{margin:0 7px;color:var(--rule)}
+
+@media (max-width:920px){
+  .hero-in{grid-template-columns:1fr;gap:28px}
+  .layout{grid-template-columns:1fr;gap:24px}
+  .panel{position:static}
+}
+@media (max-width:560px){.nav-in,.hero-in,.layout{padding-left:16px;padding-right:16px}.two{grid-template-columns:1fr}.stright{min-width:120px}.stbar{width:120px}.q{flex-wrap:wrap}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+<!-- ================= LOGIN GATE ================= -->
+<div class="gate" id="gate">
+ <div class="gate-card">
+  <div class="gate-body">
+   <div class="logo"><span class="logomark">SQL</span> <b>Practice Roadmap</b></div>
+   <span class="eyebrow">Student sign in</span>
+   <h1>Open your SQL roadmap</h1>
+   <p class="sub">Enter your lab details. Your progress is saved on this device and to the class record.</p>
+   <form id="loginForm" autocomplete="off">
+    <div class="two">
+     <div class="field"><label for="f-section">Section</label>
+      <select id="f-section" required><option value="" disabled selected>Select</option>
+       <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div>
+     <div class="field"><label for="f-lab">Lab</label>
+      <select id="f-lab" required><option value="" disabled selected>Select</option>
+       <option value="Lab 1">Lab 1</option><option value="Lab 2">Lab 2</option></select></div>
+    </div>
+    <div class="field"><label for="f-enrol">Enrolment number</label>
+     <input id="f-enrol" type="text" placeholder="e.g. 21BCS1234" required></div>
+    <div class="field"><label for="f-name">Name <span class="opt">(optional)</span></label>
+     <input id="f-name" type="text" placeholder="Your full name"></div>
+    <button class="go" type="submit" id="goBtn">Open my roadmap <span class="arw">→</span></button>
+    <div class="gate-err" id="gateErr"></div>
+   </form>
+  </div>
+  <div class="gate-foot" id="gateFoot">Developer &amp; roadmap generator &mdash; <b>Satyaki Das</b> <span class="sep">|</span> M.Tech, Jadavpur University</div>
+ </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div class="app hidden" id="app">
+ <nav class="nav">
+  <div class="nav-in">
+   <div class="brand"><span class="logomark">SQL</span> Practice Roadmap</div>
+   <div class="topright">
+    <span class="sync" id="sync"><span class="syncdot"></span><span id="syncText">Synced</span></span>
+    <span class="idchip" id="idchip"></span>
+    <button class="btn icon ghost" id="theme" aria-label="Toggle colour theme" title="Toggle theme">◐</button>
+   </div>
+  </div>
+ </nav>
+
+ <section class="hero">
+  <div class="hero-in">
+   <div>
+    <span class="eyebrow">The SQL practice track</span>
+    <h1>Master SQL, one problem at a time.</h1>
+    <p class="lede" id="lede">A curated set of SQL problems, ordered easy&nbsp;&rarr;&nbsp;hard.
+     Work the track, mark each solved, and watch your progress build.</p>
+    <div class="herostats">
+     <div><b class="num" id="statProblems">0</b><span>Problems</span></div>
+     <div><b class="num" id="statTopics">0</b><span>Topics</span></div>
+     <div><b class="num" id="statPlatforms">0</b><span>Platforms</span></div>
+    </div>
+   </div>
+   <div class="ticket">
+    <span class="glabel">Your progress</span>
+    <div class="bignum num"><span id="pct">0</span><b>%</b></div>
+    <div class="subline num"><b id="solvednum">0</b> of <span id="totalnum">177</span> problems solved</div>
+    <div class="linemeter"><i id="meterfill"></i></div>
+    <div class="perf"></div>
+    <div class="subline" id="ticketId">&nbsp;</div>
+   </div>
+  </div>
+ </section>
+
+ <div class="layout">
+  <aside class="panel">
+   <div class="card pcard">
+    <h3>By difficulty</h3>
+    <div id="meters"></div>
+   </div>
+   <div class="card pcard">
+    <h3>Coverage</h3>
+    <div class="heatwrap"><div class="heatmap" id="heatmap"></div></div>
+    <div class="heat-legend">
+     <span class="hcell"></span>Unsolved
+     <span class="hcell doubt"></span>Doubt
+     <span class="hcell solved"></span>Solved</div>
+    <div class="heat-empty" id="heatNote"></div>
+   </div>
+   <div class="card pcard filters">
+    <h3>Filter</h3>
+    <input class="search" id="search" type="search" placeholder="Search problems or topics..." aria-label="Search">
+    <div class="flabel">Difficulty</div>
+    <div class="chips" id="diffchips">
+     <button class="chip" data-diff="all" aria-pressed="true">All</button>
+     <button class="chip d-easy" data-diff="Easy" aria-pressed="false">Easy</button>
+     <button class="chip d-medium" data-diff="Medium" aria-pressed="false">Medium</button>
+     <button class="chip d-hard" data-diff="Hard" aria-pressed="false">Hard</button>
+    </div>
+    <div class="flabel">Platform</div>
+    <div class="chips" id="platchips">
+     <button class="chip" data-plat="all" aria-pressed="true">All</button>
+     <button class="chip" data-plat="Leetcode" aria-pressed="false">LeetCode</button>
+     <button class="chip" data-plat="PGExercises" aria-pressed="false">PGExercises</button>
+    </div>
+    <label class="togglerow"><input type="checkbox" id="hidesolved"><span class="sw"></span>Hide solved problems</label>
+   </div>
+  </aside>
+
+  <main>
+   <div class="road-head">
+    <div class="rh-top">
+     <div><span class="eyebrow">The track</span><h2>Your roadmap &middot; <span id="stepCount">0</span> steps</h2></div>
+     <div class="tools"><button class="btn" id="expandall">Expand all</button>
+      <button class="btn ghost" id="switch" title="Switch student">Switch</button></div>
+    </div>
+   </div>
+   <div class="roadmap" id="roadmap"></div>
+   <div class="empty" id="empty">No problems match those filters.</div>
+  </main>
+ </div>
+
+ <footer><div class="footwrap">
+  <span class="credit">Developer &amp; roadmap generator &mdash; <b>Satyaki Das</b> <span class="sep">|</span> M.Tech, Jadavpur University</span>
+  <span id="footnote">Progress stored on device (IndexedDB) &amp; synced to Google Sheets</span>
+ </div></footer>
+</div>
+<script>
+var BOOT = {"problems": [{"id": 0, "name": "Recyclable and low Fat Products", "topic": "Basic Select", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 1, "name": "Find Customer Referee", "topic": "Basic Select", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 2, "name": "Big Countries", "topic": "Basic Select", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 3, "name": "Article Views I", "topic": "Basic Select", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 4, "name": "Invalid Tweets", "topic": "Basic Select", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 5, "name": "Retrieve everything from a table", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/selectall.html"}, {"id": 6, "name": "Retrieve specific columns from a table", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/selectspecific.html"}, {"id": 7, "name": "Control which rows are retrieved", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/where.html"}, {"id": 8, "name": "Control which rows are retrieved - part 2", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/where2.html"}, {"id": 9, "name": "Basic string searches", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/where3.html"}, {"id": 10, "name": "Matching against multiple possible values", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/where4.html"}, {"id": 11, "name": "Classify results into buckets", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/classify.html"}, {"id": 12, "name": "Working with dates", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/date.html"}, {"id": 13, "name": "Removing duplicates, and ordering results", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/unique.html"}, {"id": 14, "name": "Combining results from multiple queries", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/union.html"}, {"id": 15, "name": "Simple aggregation", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/agg.html"}, {"id": 16, "name": "More aggregation", "topic": "Basic Select", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/basic/agg2.html"}, {"id": 17, "name": "Number of Unique Subjects Taught by Each Teacher", "topic": "Sorting and Grouping", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 18, "name": "User Activity for the Past 30 Days 1", "topic": "Sorting and Grouping", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/user-activity-for-the-past-30-days-i/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 19, "name": "Classes With at Least 5 Students", "topic": "Sorting and Grouping", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/classes-with-at-least-5-students/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 20, "name": "Find Followers Count", "topic": "Sorting and Grouping", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/find-followers-count/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 21, "name": "Biggest Single Number", "topic": "Sorting and Grouping", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/biggest-single-number/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 22, "name": "Product Sales Analysis III", "topic": "Sorting and Grouping", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/product-sales-analysis-iii/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 23, "name": "Customers Who Bought All Products", "topic": "Sorting and Grouping", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/customers-who-bought-all-products/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 24, "name": "Not Boring Movies", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/not-boring-movies/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 25, "name": "Average Selling Price", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/average-selling-price/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 26, "name": "Project Employees", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/project-employees-i/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 27, "name": "Percentage of Users Attended a Contest", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/percentage-of-users-attended-a-contest/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 28, "name": "Queries Quality and Percentage", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/queries-quality-and-percentage/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 29, "name": "Count the number of facilities", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/count.html"}, {"id": 30, "name": "Count the number of expensive facilities", "topic": "Basic Aggregate Functions", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/count2.html"}, {"id": 31, "name": "Monthly Transactions I", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/monthly-transactions-i/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 32, "name": "Immediate Food Delivery II", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/immediate-food-delivery-ii/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 33, "name": "Game Play Analysis IV", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/game-play-analysis-iv/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 34, "name": "Count the number of recommendations each member makes", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/count3.html"}, {"id": 35, "name": "List the total slots booked per facility", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachours.html"}, {"id": 36, "name": "List the total slots booked per facility in a given month", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachoursbymonth.html"}, {"id": 37, "name": "List the total slots booked per facility per month", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachoursbymonth2.html"}, {"id": 38, "name": "Find the count of members who have made at least one booking", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/members1.html"}, {"id": 39, "name": "List facilities with more than 1000 slots booked", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachours1a.html"}, {"id": 40, "name": "Find the total revenue of each facility", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/facrev.html"}, {"id": 41, "name": "Find facilities with a total revenue less than 1000", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/facrev2.html"}, {"id": 42, "name": "Output the facility id that has the highest number of slots booked", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachours2.html"}, {"id": 43, "name": "List the total hours booked per named facility", "topic": "Basic Aggregate Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachours3.html"}, {"id": 44, "name": "List the total slots booked per facility per month, part 2", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachoursbymonth3.html"}, {"id": 45, "name": "List each member's first booking after September 1st 2012", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/nbooking.html"}, {"id": 46, "name": "Produce a list of member names, with each row containing the total member count", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/countmembers.html"}, {"id": 47, "name": "Produce a numbered list of members", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/nummembers.html"}, {"id": 48, "name": "Output the facility id that has the highest number of slots booked, again", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/fachours4.html"}, {"id": 49, "name": "Rank members by (rounded) hours used", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/rankmembers.html"}, {"id": 50, "name": "Find the top three revenue generating facilities", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/facrev3.html"}, {"id": 51, "name": "Classify facilities by value", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/classify.html"}, {"id": 52, "name": "Calculate the payback time for each facility", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/payback.html"}, {"id": 53, "name": "Calculate a rolling average of total revenue", "topic": "Basic Aggregate Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/aggregates/rollingavg.html"}, {"id": 54, "name": "Replace Employee ID With the Unique Identifier", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 55, "name": "Product Sales Analysis I", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/product-sales-analysis-i/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 56, "name": "Customer Who Visited but Did Not Make Any Transactions", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 57, "name": "Rising Temperature", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/rising-temperature/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 58, "name": "Average Time of Process per Machine", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/average-time-of-process-per-machine/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 59, "name": "Employee Bonus", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/employee-bonus/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 60, "name": "Students and Examinations", "topic": "Basic Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/students-and-examinations/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 61, "name": "Retrieve the start times of members' bookings", "topic": "Basic Joins", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/simplejoin.html"}, {"id": 62, "name": "Work out the start times of bookings for tennis courts", "topic": "Basic Joins", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/simplejoin2.html"}, {"id": 63, "name": "Managers with at Least 5 Direct Reports", "topic": "Basic Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 64, "name": "Confirmation Rate", "topic": "Basic Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/confirmation-rate/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 65, "name": "Produce a list of all members who have recommended another member", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/self.html"}, {"id": 66, "name": "Produce a list of all members, along with their recommender", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/self2.html"}, {"id": 67, "name": "Produce a list of all members who have used a tennis court", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/threejoin.html"}, {"id": 68, "name": "Produce a list of costly bookings", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/threejoin2.html"}, {"id": 69, "name": "Produce a list of all members, along with their recommender, using no joins", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/sub.html"}, {"id": 70, "name": "Produce a list of costly bookings, using a subquery", "topic": "Basic Joins", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/joins/tjsub.html"}, {"id": 71, "name": "The Number of Employees Which Report to Each Employee", "topic": "Advanced Select and Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 72, "name": "Primary Department for Each Employee", "topic": "Advanced Select and Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/primary-department-for-each-employee/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 73, "name": "Triangle Judgement", "topic": "Advanced Select and Joins", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/triangle-judgement/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 74, "name": "Consecutive Numbers", "topic": "Advanced Select and Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/consecutive-numbers/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 75, "name": "Product Price at a Given Date", "topic": "Advanced Select and Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/product-price-at-a-given-date/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 76, "name": "Last Person to Fit in the Bus", "topic": "Advanced Select and Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/last-person-to-fit-in-the-bus/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 77, "name": "Count Salary Categories", "topic": "Advanced Select and Joins", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/count-salary-categories/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 78, "name": "Employees Whose Manager Left the Company", "topic": "Subqueries", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/employees-whose-manager-left-the-company/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 79, "name": "Exchange Seats", "topic": "Subqueries", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/exchange-seats/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 80, "name": "Movie Rating", "topic": "Subqueries", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/movie-rating/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 81, "name": "Restaurant Growth", "topic": "Subqueries", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/restaurant-growth/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 82, "name": "Friend Requests II: Who Has the Most Friends", "topic": "Subqueries", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 83, "name": "Investments in 2016", "topic": "Subqueries", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/investments-in-2016/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 84, "name": "Department Top Three Salaries", "topic": "Subqueries", "diff": "Hard", "platform": "Leetcode", "link": "https://leetcode.com/problems/department-top-three-salaries/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 85, "name": "Insert some data into a table", "topic": "Data Modification", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/insert.html"}, {"id": 86, "name": "Insert multiple rows of data into a table", "topic": "Data Modification", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/insert2.html"}, {"id": 87, "name": "Update some existing data", "topic": "Data Modification", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/update.html"}, {"id": 88, "name": "Delete all bookings", "topic": "Data Modification", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/delete.html"}, {"id": 89, "name": "Delete a member from the cd.members table", "topic": "Data Modification", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/deletewh.html"}, {"id": 90, "name": "Insert calculated data into a table", "topic": "Data Modification", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/insert3.html"}, {"id": 91, "name": "Update multiple rows and columns at the same time", "topic": "Data Modification", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/updatemultiple.html"}, {"id": 92, "name": "Update a row based on the contents of another row", "topic": "Data Modification", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/updatecalculated.html"}, {"id": 93, "name": "Delete based on a subquery", "topic": "Data Modification", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/updates/deletewh2.html"}, {"id": 94, "name": "Produce a timestamp for 1 a.m. on the 31st of August 2012", "topic": "Date/Time Functions", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/timestamp.html"}, {"id": 95, "name": "Subtract timestamps from each other", "topic": "Date/Time Functions", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/interval.html"}, {"id": 96, "name": "Get the day of the month from a timestamp", "topic": "Date/Time Functions", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/extract.html"}, {"id": 97, "name": "Generate a list of all the dates in October 2012", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/series.html"}, {"id": 98, "name": "Work out the number of seconds between timestamps", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/interval2.html"}, {"id": 99, "name": "Work out the number of days in each month of 2012", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/daysinmonth.html"}, {"id": 100, "name": "Work out the number of days remaining in the month", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/daysremaining.html"}, {"id": 101, "name": "Work out the end time of bookings", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/endtimes.html"}, {"id": 102, "name": "Return a count of bookings for each month", "topic": "Date/Time Functions", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/bookingspermonth.html"}, {"id": 103, "name": "Work out the utilisation percentage for each facility by month", "topic": "Date/Time Functions", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/date/utilisationpermonth.html"}, {"id": 104, "name": "Fix Names in a Table", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/fix-names-in-a-table/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 105, "name": "Patients With a Condition", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/patients-with-a-condition/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 106, "name": "Delete Duplicate Emails", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/delete-duplicate-emails/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 107, "name": "Group Sold Products By The Date", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/group-sold-products-by-the-date/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 108, "name": "List the Products Ordered in a Period", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/list-the-products-ordered-in-a-period/description/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 109, "name": "Find Users With Valid E-Mails", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "Leetcode", "link": "https://leetcode.com/problems/find-users-with-valid-e-mails/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 110, "name": "Format the names of members", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/concat.html"}, {"id": 111, "name": "Find facilities by a name prefix", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/like.html"}, {"id": 112, "name": "Perform a case-insensitive search", "topic": "Advanced String Functions/Regex/Clause", "diff": "Easy", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/case.html"}, {"id": 113, "name": "Second Highest Salary", "topic": "Advanced String Functions/Regex/Clause", "diff": "Medium", "platform": "Leetcode", "link": "https://leetcode.com/problems/second-highest-salary/?envType=study-plan-v2&envId=top-sql-50"}, {"id": 114, "name": "Find telephone numbers with parentheses", "topic": "Advanced String Functions/Regex/Clause", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/reg.html"}, {"id": 115, "name": "Pad zip codes with leading zeroes", "topic": "Advanced String Functions/Regex/Clause", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/pad.html"}, {"id": 116, "name": "Count the number of members whose surname starts with each letter", "topic": "Advanced String Functions/Regex/Clause", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/substr.html"}, {"id": 117, "name": "Clean up telephone numbers", "topic": "Advanced String Functions/Regex/Clause", "diff": "Medium", "platform": "PGExercises", "link": "https://pgexercises.com/questions/string/translate.html"}, {"id": 118, "name": "Find the upward recommendation chain for member ID 27", "topic": "Recursive Queries (CTE)", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/recursive/getupward.html"}, {"id": 119, "name": "Find the downward recommendation chain for member ID 1", "topic": "Recursive Queries (CTE)", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/recursive/getdownward.html"}, {"id": 120, "name": "Produce a CTE that returns the upward recommendation chain for any member", "topic": "Recursive Queries (CTE)", "diff": "Hard", "platform": "PGExercises", "link": "https://pgexercises.com/questions/recursive/getupwardall.html"}], "topics": [{"name": "Basic Select", "desc": "SELECT, WHERE and the fundamentals of filtering rows."}, {"name": "Sorting and Grouping", "desc": "ORDER BY, GROUP BY and shaping result sets."}, {"name": "Basic Aggregate Functions", "desc": "COUNT, SUM, AVG and grouped rollups."}, {"name": "Basic Joins", "desc": "Combining tables with inner and self joins."}, {"name": "Advanced Select and Joins", "desc": "Correlated logic reaching across joined tables."}, {"name": "Subqueries", "desc": "Nested queries and derived tables."}, {"name": "Data Modification", "desc": "INSERT, UPDATE, DELETE — the write side of SQL."}, {"name": "Date/Time Functions", "desc": "Timestamps, intervals and date arithmetic."}, {"name": "Advanced String Functions/Regex/Clause", "desc": "Pattern matching, formatting and regular expressions."}, {"name": "Recursive Queries (CTE)", "desc": "WITH RECURSIVE and walking hierarchies."}]};
+var RECORDS = BOOT.problems, TOPICS = BOOT.topics;
+var DIFFS = ["Easy","Medium","Hard"];
+var PLATCLASS = {HackerRank:"hr",Leetcode:"lc",PGExercises:"pg"};
+var PLATSHORT = {HackerRank:"HackerRank",Leetcode:"LeetCode",PGExercises:"PGExercises"};
+var HAS_GAS = !!(window.google && google.script && google.script.run);
+
+/* ================= IndexedDB ================= */
+var IDB_OK = ("indexedDB" in window);
+function idbOpen(){ return new Promise(function(res,rej){
+  var r=indexedDB.open("sqlRoadmap",1);
+  r.onupgradeneeded=function(e){ var db=e.target.result;
+    if(!db.objectStoreNames.contains("students")) db.createObjectStore("students",{keyPath:"enrolment"});
+    if(!db.objectStoreNames.contains("meta")) db.createObjectStore("meta",{keyPath:"k"}); };
+  r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }); }
+function idbGet(store,key){ if(!IDB_OK) return Promise.resolve(null);
+  return idbOpen().then(function(db){ return new Promise(function(res,rej){
+    var t=db.transaction(store,"readonly").objectStore(store).get(key);
+    t.onsuccess=function(){res(t.result||null);}; t.onerror=function(){rej(t.error);}; }); }).catch(function(){return null;}); }
+function idbPut(store,val){ if(!IDB_OK) return Promise.resolve(false);
+  return idbOpen().then(function(db){ return new Promise(function(res,rej){
+    var t=db.transaction(store,"readwrite").objectStore(store).put(val);
+    t.onsuccess=function(){res(true);}; t.onerror=function(){rej(t.error);}; }); }).catch(function(){return false;}); }
+function saveLocal(){ if(!STUDENT) return;
+  idbPut("students",{enrolment:STUDENT.enrolment,section:STUDENT.section,lab:STUDENT.lab,name:STUDENT.name,
+    ip:STUDENT.ip||"",statuses:state,activity:activityMap,updated:Date.now()});
+  idbPut("meta",{k:"last",enrolment:STUDENT.enrolment,section:STUDENT.section,lab:STUDENT.lab,name:STUDENT.name}); }
+
+/* ================= public IP (ipify) ================= */
+function getIP(){ return new Promise(function(res){
+  var done=false, ctrl=("AbortController" in window)?new AbortController():null;
+  var to=setTimeout(function(){ if(!done){done=true; if(ctrl) ctrl.abort(); res(""); } },4000);
+  try{ fetch("https://api.ipify.org?format=json", ctrl?{signal:ctrl.signal}:{})
+    .then(function(r){return r.json();})
+    .then(function(j){ if(!done){done=true;clearTimeout(to);res(j&&j.ip?j.ip:"");} })
+    .catch(function(){ if(!done){done=true;clearTimeout(to);res("");} });
+  }catch(e){ if(!done){done=true;clearTimeout(to);res("");} } }); }
+
+/* ================= server abstraction ================= */
+/* EXEC_URL is the deployed Apps Script /exec endpoint. Set for the GitHub Pages
+   build (static host, no google.script.run) so it POSTs to the same backend.
+   Empty for the Apps-Script-served and local-preview builds. */
+var EXEC_URL = "https://script.google.com/macros/s/AKfycbz9ql5TTiqhYJ5OSsa7XyaMqKADCm0LnY6lCCfcfQXieydSF8gdiWN9ub_D69P_npr8/exec";
+function apiPost(payload){
+  return fetch(EXEC_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)})
+    .then(function(r){ return r.json(); });
+}
+function serverLogin(info, ok, fail){
+  if(HAS_GAS){ google.script.run.withSuccessHandler(ok).withFailureHandler(fail).login(info); return; }
+  if(EXEC_URL){ apiPost({action:"login",section:info.section,lab:info.lab,enrolment:info.enrolment,name:info.name,ip:info.ip})
+      .then(function(res){ if(res && !res.error) ok(res); else fail(res&&res.error||"login failed"); })
+      .catch(function(e){ fail(e); }); return; }
+  idbGet("students", String(info.enrolment).toUpperCase()).then(function(local){
+    ok({enrolment:String(info.enrolment).toUpperCase(),section:info.section,lab:info.lab,name:info.name,statuses:(local&&local.statuses)||{}}); }); }
+function serverSave(payload, ok, fail){
+  if(HAS_GAS){ google.script.run.withSuccessHandler(ok).withFailureHandler(fail).saveStatus(payload); return; }
+  if(EXEC_URL){ apiPost({action:"saveStatus",enrolment:payload.enrolment,index:payload.index,status:payload.status,ip:payload.ip})
+      .then(function(res){ if(res && res.ok) ok(res); else fail(); }).catch(function(){ fail(); }); return; }
+  ok({ok:true}); }
+
+/* ================= state ================= */
+var STUDENT=null, state={}, activityMap={};
+var byTopic={}; RECORDS.forEach(function(r){ (byTopic[r.topic]=byTopic[r.topic]||[]).push(r); });
+
+/* fill hero stats / heading / lede from the live catalog */
+(function(){
+  var plats=[]; RECORDS.forEach(function(r){ if(plats.indexOf(r.platform)<0) plats.push(r.platform); });
+  var pn={HackerRank:"HackerRank",Leetcode:"LeetCode",PGExercises:"PGExercises"};
+  var names=plats.map(function(p){ return pn[p]||p; });
+  function human(a){ return a.length<=1?(a[0]||""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
+  function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+  set("statProblems",RECORDS.length); set("statTopics",TOPICS.length);
+  set("statPlatforms",plats.length); set("stepCount",TOPICS.length);
+  var ld=document.getElementById("lede");
+  if(ld) ld.textContent=RECORDS.length+" curated problems across "+TOPICS.length+" topics from "+human(names)+", ordered easy → hard. Work the track, mark each solved, and watch your progress build.";
+})();
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function pad2(n){ return (n<10?"0":"")+n; }
+function ymd(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+
+/* ================= build stations ================= */
+var road=document.getElementById("roadmap");
+TOPICS.forEach(function(t,i){
+  var items=byTopic[t.name], counts={Easy:0,Medium:0,Hard:0};
+  items.forEach(function(r){ counts[r.diff]++; });
+  var dist=DIFFS.filter(function(d){return counts[d]>0;}).map(function(d){
+    return '<span class="tag '+d.toLowerCase()+'"><span class="sq '+d.toLowerCase()+'"></span>'+counts[d]+' '+d+'</span>';}).join("");
+  var groups="";
+  DIFFS.forEach(function(d){
+    var gi=items.filter(function(r){return r.diff===d;}); if(!gi.length) return;
+    groups+='<div class="dgroup"><div class="dghead"><span class="sq '+d.toLowerCase()+'"></span>'+d+'</div>';
+    gi.forEach(function(r){ var pc=PLATCLASS[r.platform]||"";
+      groups+='<div class="q" data-id="'+r.id+'" data-diff="'+r.diff+'" data-plat="'+r.platform+'" data-name="'+esc(r.name.toLowerCase())+'">'
+        +'<button class="state" aria-label="Cycle status"></button>'
+        +'<span class="qname"><a href="'+esc(r.link)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a></span>'
+        +'<span class="qmeta"><span class="plat '+pc+'">'+esc(PLATSHORT[r.platform]||r.platform)+'</span>'
+        +'<a class="qlink" href="'+esc(r.link)+'" target="_blank" rel="noopener" aria-label="Open problem" title="Open problem">&#8599;</a></span></div>';
+    }); groups+='</div>';
+  });
+  var st=document.createElement("section"); st.className="station"; st.dataset.topic=t.name;
+  st.innerHTML='<div class="node">'+pad2(i+1)+'</div>'
+    +'<button class="sthead" aria-expanded="false">'
+      +'<div class="st-main">'
+        +'<div class="sttitle"><h3>'+esc(t.name)+'</h3><span class="stpct num"></span></div>'
+        +'<div class="stdesc">'+esc(t.desc)+'</div>'
+        +'<div class="stdist">'+dist+'</div>'
+      +'</div>'
+      +'<div class="stright"><span class="stcount num"><b class="sn">0</b> / '+items.length+' solved</span><div class="stbar"><i></i></div></div>'
+      +'<span class="caret" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg></span>'
+    +'</button>'
+    +'<div class="stbody">'+groups+'</div>';
+  road.appendChild(st);
+});
+
+/* ================= heatmap ================= */
+function renderHeatmap(){
+  var hm=document.getElementById("heatmap"); if(!hm) return; hm.innerHTML="";
+  var solved=0;
+  RECORDS.forEach(function(r){
+    var st=statusOf(r.id);
+    var cell=document.createElement("div");
+    cell.className="hcell"+(st==="solved"?" solved":(st==="doubt"?" doubt":""));
+    cell.title=r.name+" — "+(st==="unsolved"?"Unsolved":(st==="doubt"?"Doubt":"Solved"));
+    if(st==="solved") solved++;
+    hm.appendChild(cell);
+  });
+  var note=document.getElementById("heatNote");
+  if(note) note.textContent = solved
+    ? (solved+" of "+RECORDS.length+" problems solved")
+    : "No problems solved yet — tick one to fill the map.";
+}
+function bumpActivity(delta){ /* coverage map derives from status; no-op */ }
+
+/* ================= progress readout ================= */
+function statusOf(id){ return state[id]||"unsolved"; }
+function glyph(s){ return s==="solved"?"&#10003;":(s==="doubt"?"?":""); }
+function refresh(){
+  document.querySelectorAll(".q").forEach(function(q){ var s=statusOf(+q.dataset.id);
+    q.classList.toggle("solved",s==="solved"); q.classList.toggle("doubt",s==="doubt");
+    q.querySelector(".state").innerHTML=glyph(s); });
+  var total=0, ds={Easy:0,Medium:0,Hard:0}, dt={Easy:0,Medium:0,Hard:0};
+  document.querySelectorAll(".station").forEach(function(st){
+    var items=byTopic[st.dataset.topic], solved=0;
+    items.forEach(function(r){ if(statusOf(r.id)==="solved"){solved++;ds[r.diff]++;} dt[r.diff]++; });
+    total+=solved; st.querySelector(".sn").textContent=solved;
+    var p=Math.round(solved/items.length*100);
+    st.querySelector(".stbar>i").style.width=p+"%";
+    var pctEl=st.querySelector(".stpct"); if(pctEl) pctEl.textContent = solved? (p+"%") : "";
+    st.classList.toggle("done",solved===items.length); st.classList.toggle("part",solved>0&&solved<items.length);
+  });
+  var pct=Math.round(total/RECORDS.length*100);
+  document.getElementById("pct").textContent=pct;
+  document.getElementById("meterfill").style.width=pct+"%";
+  document.getElementById("solvednum").textContent=total;
+  document.getElementById("totalnum").textContent=RECORDS.length;
+  document.getElementById("meters").innerHTML=DIFFS.map(function(d){
+    var w=dt[d]?(ds[d]/dt[d]*100):0;
+    return '<div class="meter"><div class="top"><span class="nm"><span class="sq '+d.toLowerCase()+'"></span>'+d+'</span>'
+      +'<span class="vl num">'+ds[d]+' / '+dt[d]+'</span></div><div class="track"><i class="'+d.toLowerCase()+'" style="width:'+w+'%"></i></div></div>';
+  }).join("");
+  renderHeatmap();
+}
+
+/* ================= sync queue ================= */
+var syncEl=document.getElementById("sync"), syncTxt=document.getElementById("syncText");
+function setSync(kind,msg){ syncEl.className="sync"+(kind?" "+kind:""); syncTxt.textContent=msg; }
+var queue=[], sending=false;
+function enqueue(index,status){ queue=queue.filter(function(x){return x.index!==index;}); queue.push({index:index,status:status}); flush(); }
+function flush(){ if(sending||!queue.length||!STUDENT) return;
+  sending=true; setSync("saving","Saving…"); var item=queue[0];
+  serverSave({enrolment:STUDENT.enrolment,index:item.index,status:item.status,ip:STUDENT.ip||""},
+    function(){ queue.shift(); sending=false; if(queue.length){flush();} else {setSync("","Synced");} },
+    function(){ sending=false; setSync("offline","Offline"); }); }
+setInterval(function(){ if(queue.length && !sending) flush(); }, 12000);
+
+/* ================= interactions ================= */
+road.addEventListener("click",function(e){
+  var b=e.target.closest(".state");
+  if(b){ var q=b.closest(".q"), id=+q.dataset.id, cur=statusOf(id);
+    var next=cur==="unsolved"?"solved":(cur==="solved"?"doubt":"unsolved");
+    if(next==="solved" && cur!=="solved") bumpActivity(1);
+    else if(cur==="solved" && next!=="solved") bumpActivity(-1);
+    if(next==="unsolved") delete state[id]; else state[id]=next;
+    refresh(); applyFilters(); saveLocal(); enqueue(id,next); return; }
+  var h=e.target.closest(".sthead");
+  if(h){ var st=h.closest(".station"); var open=st.classList.toggle("open"); h.setAttribute("aria-expanded",open); }
+});
+var fDiff="all",fPlat="all",fText="",fHide=false;
+function bindChips(cid,key,setter){ document.getElementById(cid).addEventListener("click",function(e){
+  var c=e.target.closest(".chip"); if(!c) return;
+  document.querySelectorAll("#"+cid+" .chip").forEach(function(x){x.setAttribute("aria-pressed","false");});
+  c.setAttribute("aria-pressed","true"); setter(c.dataset[key]); applyFilters(); }); }
+bindChips("diffchips","diff",function(v){fDiff=v;});
+bindChips("platchips","plat",function(v){fPlat=v;});
+document.getElementById("search").addEventListener("input",function(e){ fText=e.target.value.trim().toLowerCase(); applyFilters(); });
+document.getElementById("hidesolved").addEventListener("change",function(e){ fHide=e.target.checked; applyFilters(); });
+function applyFilters(){ var any=false;
+  document.querySelectorAll(".station").forEach(function(st){ var shown=0;
+    st.querySelectorAll(".q").forEach(function(q){ var s=statusOf(+q.dataset.id), ok=true;
+      if(fDiff!=="all"&&q.dataset.diff!==fDiff) ok=false;
+      if(fPlat!=="all"&&q.dataset.plat!==fPlat) ok=false;
+      if(fHide&&s==="solved") ok=false;
+      if(fText&&!(q.dataset.name.indexOf(fText)>-1||st.dataset.topic.toLowerCase().indexOf(fText)>-1)) ok=false;
+      q.classList.toggle("hide",!ok); if(ok) shown++; });
+    st.querySelectorAll(".dgroup").forEach(function(g){
+      var vis=[].slice.call(g.querySelectorAll(".q")).some(function(q){return !q.classList.contains("hide");});
+      g.style.display=vis?"":"none"; });
+    st.classList.toggle("hide",shown===0); if(shown>0) any=true;
+    if(fText&&shown>0&&st.dataset.topic.toLowerCase().indexOf(fText)===-1){ st.classList.add("open"); st.querySelector(".sthead").setAttribute("aria-expanded","true"); }
+  });
+  document.getElementById("empty").style.display=any?"none":"block"; }
+var expBtn=document.getElementById("expandall");
+expBtn.addEventListener("click",function(){
+  var anyClosed=[].slice.call(document.querySelectorAll(".station:not(.hide)")).some(function(s){return !s.classList.contains("open");});
+  document.querySelectorAll(".station").forEach(function(s){ s.classList.toggle("open",anyClosed); s.querySelector(".sthead").setAttribute("aria-expanded",anyClosed); });
+  expBtn.textContent=anyClosed?"Collapse all":"Expand all"; });
+
+/* ================= theme ================= */
+var savedTheme=null; try{ savedTheme=localStorage.getItem("sqlRoadmapTheme"); }catch(e){}
+if(savedTheme) document.documentElement.setAttribute("data-theme",savedTheme);
+document.getElementById("theme").addEventListener("click",function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var isDark=cur?cur==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  var next=isDark?"light":"dark"; document.documentElement.setAttribute("data-theme",next);
+  try{ localStorage.setItem("sqlRoadmapTheme",next); }catch(e){} });
+
+/* ================= login flow ================= */
+var gate=document.getElementById("gate"), app=document.getElementById("app"),
+    goBtn=document.getElementById("goBtn"), gateErr=document.getElementById("gateErr");
+if(!HAS_GAS){ document.getElementById("footnote").textContent="preview mode — saved on this device only (not connected to a Sheet)"; }
+idbGet("meta","last").then(function(last){ if(!last) return;
+  if(last.section) document.getElementById("f-section").value=last.section;
+  if(last.lab) document.getElementById("f-lab").value=last.lab;
+  if(last.enrolment) document.getElementById("f-enrol").value=last.enrolment;
+  if(last.name) document.getElementById("f-name").value=last.name; });
+
+function renderApp(res){
+  STUDENT=res; state={}; Object.keys(res.statuses||{}).forEach(function(k){ state[+k]=res.statuses[k]; });
+  var ipTxt = res.ip ? (' <span class="sep">·</span> IP <span class="ip">'+esc(res.ip)+'</span>') : '';
+  document.getElementById("idchip").innerHTML='<b>'+esc(res.enrolment)+'</b> <span class="sep">·</span> Sec '+esc(res.section||"?")+' <span class="sep">·</span> '+esc(res.lab||"?")+ipTxt;
+  var tk=document.getElementById("ticketId"); if(tk) tk.innerHTML='Signed in as <b>'+esc(res.enrolment)+'</b>'+(res.ip?(' <span class="sep">·</span> IP '+esc(res.ip)):'');
+  refresh(); applyFilters();
+  gate.classList.add("hidden"); app.classList.remove("hidden");
+  goBtn.disabled=false; goBtn.textContent="Open my roadmap"; window.scrollTo(0,0); saveLocal();
+}
+document.getElementById("loginForm").addEventListener("submit",function(e){
+  e.preventDefault(); gateErr.textContent="";
+  var info={ section:document.getElementById("f-section").value, lab:document.getElementById("f-lab").value,
+    enrolment:document.getElementById("f-enrol").value.trim(), name:document.getElementById("f-name").value.trim() };
+  if(!info.section||!info.lab){ gateErr.textContent="Choose your section and lab."; return; }
+  if(!info.enrolment){ gateErr.textContent="Enter your enrolment number."; return; }
+  goBtn.disabled=true; goBtn.textContent="Opening…";
+  var enrolKey=info.enrolment.toUpperCase();
+  Promise.all([ getIP(), idbGet("students", enrolKey) ]).then(function(arr){
+    var ip=arr[0], local=arr[1]; info.ip=ip; activityMap=(local&&local.activity)||{};
+    serverLogin(info, function(res){ res.ip=ip; setSync("","Synced"); renderApp(res); },
+      function(err){
+        if(local){ renderApp({enrolment:enrolKey,section:info.section,lab:info.lab,name:info.name,ip:ip,statuses:local.statuses||{}}); setSync("offline","Offline"); }
+        else { goBtn.disabled=false; goBtn.textContent="Open my roadmap"; gateErr.textContent="couldn\u2019t reach the class sheet and no local copy exists. try again."; }
+      });
+  });
+});
+document.getElementById("switch").addEventListener("click",function(){
+  if(queue.length && !confirm("Some changes are still syncing. Switch anyway?")) return;
+  STUDENT=null; state={}; activityMap={}; queue=[]; setSync("","Synced");
+  app.classList.add("hidden"); gate.classList.remove("hidden"); window.scrollTo(0,0); });
+</script>
+</body></html>
