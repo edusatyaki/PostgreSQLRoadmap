@@ -381,7 +381,7 @@ function getIP(){ return new Promise(function(res){
 /* EXEC_URL is the deployed Apps Script /exec endpoint. Set for the GitHub Pages
    build (static host, no google.script.run) so it POSTs to the same backend.
    Empty for the Apps-Script-served and local-preview builds. */
-var EXEC_URL = "https://script.google.com/macros/s/AKfycbz9ql5TTiqhYJ5OSsa7XyaMqKADCm0LnY6lCCfcfQXieydSF8gdiWN9ub_D69P_npr8/exec";
+var EXEC_URL = "https://script.google.com/macros/s/AKfycbx8PqoVZd6e4qMcTfBHng2luXTJ5SYjGYXtDfHRG1LfPHhfLCoU3xEJNCwSMx2X5w_C/exec";
 function apiPost(payload){
   return fetch(EXEC_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)})
     .then(function(r){ return r.json(); });
