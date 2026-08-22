@@ -238,8 +238,8 @@ footer{border-top:1px solid var(--rule);padding:24px;background:var(--surface-2)
     </div>
     <div class="field"><label for="f-enrol">Enrolment number</label>
      <input id="f-enrol" type="text" placeholder="e.g. 21BCS1234" required></div>
-    <div class="field"><label for="f-name">Name <span class="opt">(optional)</span></label>
-     <input id="f-name" type="text" placeholder="Your full name"></div>
+    <div class="field"><label for="f-name">Name</label>
+     <input id="f-name" type="text" placeholder="Your full name" required></div>
     <button class="go" type="submit" id="goBtn">Open my roadmap <span class="arw">→</span></button>
     <div class="gate-err" id="gateErr"></div>
    </form>
@@ -590,6 +590,7 @@ document.getElementById("loginForm").addEventListener("submit",function(e){
     enrolment:document.getElementById("f-enrol").value.trim(), name:document.getElementById("f-name").value.trim() };
   if(!info.section||!info.lab){ gateErr.textContent="Choose your section and lab."; return; }
   if(!info.enrolment){ gateErr.textContent="Enter your enrolment number."; return; }
+  if(!info.name){ gateErr.textContent="Please enter your name."; return; }
   goBtn.disabled=true; goBtn.textContent="Opening…";
   var enrolKey=info.enrolment.toUpperCase();
   Promise.all([ getIP(), idbGet("students", enrolKey) ]).then(function(arr){
