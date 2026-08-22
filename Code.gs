@@ -77,6 +77,8 @@ function findRow_(sh, enrol){
   return -1;
 }
 
+/* login: only NEW-row creation is serialized, and with a resilient tryLock so a
+   held/stuck lock can never block sign-ins (worst case a rare duplicate row). */
 function login(info){
   var enrol = normEnrol_(info && info.enrolment);
   if(!enrol) throw new Error('Enrolment number is required.');
@@ -84,33 +86,33 @@ function login(info){
   var lab = String(info.lab||'').trim();
   var name = String(info.name||'').trim();
   var ip = String(info.ip||'').trim();
-  var lock = LockService.getScriptLock(); lock.waitLock(15000);
-  try{
-    var sh = progressSheet_();
-    var nCols = FIRST_Q_COL - 1 + BOOT.problems.length;
-    var row = findRow_(sh, enrol);
-    if(row < 0){
-      row = Math.max(sh.getLastRow()+1, 2);
-      var blank = new Array(nCols); for(var i=0;i<nCols;i++) blank[i]='';
-      blank[0]=enrol; blank[1]=section; blank[2]=lab; blank[3]=name; blank[4]=ip; blank[5]=new Date();
-      sh.getRange(row,1,1,nCols).setValues([blank]);
-    } else {
-      if(section) sh.getRange(row,2).setValue(section);
-      if(lab)     sh.getRange(row,3).setValue(lab);
-      if(name)    sh.getRange(row,4).setValue(name);
-      if(ip)      sh.getRange(row,5).setValue(ip);
-      sh.getRange(row,6).setValue(new Date());
-    }
+  var sh = progressSheet_();
+  var row = findRow_(sh, enrol);
+  if(row < 0){
+    var lock = LockService.getScriptLock(); var have=false;
+    try{ have = lock.tryLock(8000); }catch(e){ have=false; }
+    try{
+      row = findRow_(sh, enrol);                 // re-check inside lock
+      if(row < 0){ sh.appendRow([enrol, section, lab, name, ip, new Date()]); row = findRow_(sh, enrol); }
+    } finally { if(have) lock.releaseLock(); }
+  }
+  if(row < 0) row = findRow_(sh, enrol);
+  if(row >= 0){
+    if(section) sh.getRange(row,2).setValue(section);
+    if(lab)     sh.getRange(row,3).setValue(lab);
+    if(name)    sh.getRange(row,4).setValue(name);
+    if(ip)      sh.getRange(row,5).setValue(ip);
+    sh.getRange(row,6).setValue(new Date());
     var vals = sh.getRange(row, FIRST_Q_COL, 1, BOOT.problems.length).getValues()[0];
     var statuses = {};
-    for(var j=0;j<vals.length;j++){
-      var v = String(vals[j]||'').trim().toLowerCase();
-      if(v==='solved'||v==='doubt') statuses[j]=v;
-    }
+    for(var j=0;j<vals.length;j++){ var v=String(vals[j]||'').trim().toLowerCase(); if(v==='solved'||v==='doubt') statuses[j]=v; }
     return {enrolment:enrol, section:section, lab:lab, name:name, statuses:statuses};
-  } finally { lock.releaseLock(); }
+  }
+  return {enrolment:enrol, section:section, lab:lab, name:name, statuses:{}};
 }
 
+/* saveStatus: no global lock. Each call writes a single cell in one student's
+   existing row; concurrent saves for different students never collide. */
 function saveStatus(payload){
   var enrol = normEnrol_(payload && payload.enrolment);
   var index = Number(payload && payload.index);
@@ -118,37 +120,32 @@ function saveStatus(payload){
   var ip = String(payload && payload.ip || '').trim();
   if(!enrol) throw new Error('Missing enrolment.');
   if(!(index>=0 && index<BOOT.problems.length)) throw new Error('Bad problem index.');
-  var lock = LockService.getScriptLock(); lock.waitLock(15000);
-  try{
-    var sh = progressSheet_();
-    var row = findRow_(sh, enrol);
-    if(row < 0) throw new Error('Student not found; log in again.');
-    sh.getRange(row, FIRST_Q_COL + index).setValue(status==='solved'||status==='doubt'?status:'');
-    if(ip) sh.getRange(row,5).setValue(ip);
-    sh.getRange(row,6).setValue(new Date());
-    return {ok:true, ts:new Date().getTime()};
-  } finally { lock.releaseLock(); }
+  var sh = progressSheet_();
+  var row = findRow_(sh, enrol);
+  if(row < 0) throw new Error('Student not found; log in again.');
+  sh.getRange(row, FIRST_Q_COL + index).setValue(status==='solved'||status==='doubt'?status:'');
+  if(ip) sh.getRange(row,5).setValue(ip);
+  sh.getRange(row,6).setValue(new Date());
+  return {ok:true, ts:new Date().getTime()};
 }
 
+/* saveBatch: no global lock (updates cells within one existing row). */
 function saveBatch(payload){
   var enrol = normEnrol_(payload && payload.enrolment);
   var items = (payload && payload.items) || [];
   var ip = String(payload && payload.ip || '').trim();
   if(!enrol) throw new Error('Missing enrolment.');
-  var lock = LockService.getScriptLock(); lock.waitLock(20000);
-  try{
-    var sh = progressSheet_();
-    var row = findRow_(sh, enrol);
-    if(row < 0) throw new Error('Student not found; log in again.');
-    for(var k=0;k<items.length;k++){
-      var it=items[k], idx=Number(it.index);
-      if(idx>=0 && idx<BOOT.problems.length){
-        var s=String(it.status||'').toLowerCase();
-        sh.getRange(row, FIRST_Q_COL+idx).setValue(s==='solved'||s==='doubt'?s:'');
-      }
+  var sh = progressSheet_();
+  var row = findRow_(sh, enrol);
+  if(row < 0) throw new Error('Student not found; log in again.');
+  for(var k=0;k<items.length;k++){
+    var it=items[k], idx=Number(it.index);
+    if(idx>=0 && idx<BOOT.problems.length){
+      var s=String(it.status||'').toLowerCase();
+      sh.getRange(row, FIRST_Q_COL+idx).setValue(s==='solved'||s==='doubt'?s:'');
     }
-    if(ip) sh.getRange(row,5).setValue(ip);
-    sh.getRange(row,6).setValue(new Date());
-    return {ok:true, ts:new Date().getTime()};
-  } finally { lock.releaseLock(); }
+  }
+  if(ip) sh.getRange(row,5).setValue(ip);
+  sh.getRange(row,6).setValue(new Date());
+  return {ok:true, ts:new Date().getTime()};
 }
